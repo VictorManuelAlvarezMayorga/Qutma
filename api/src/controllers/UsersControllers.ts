@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { UserModels } from "../models/UsersModels";
+import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 export const registerUsers = async (req: Request,res: Response):
 Promise<any>=>{
@@ -38,13 +39,17 @@ Promise<any>=>{
             rol: rol
         })*/
 
-        await UserModels.create({
+        const user = await UserModels.create({
             name,
             lastNames,
             email,
             password,
             rol
         })
+
+        const token = jwt.sign(JSON.stringify(user),"shhh");
+
+        res.status(200).json({msg: "Usuario registrado con exito", token })
 
     } catch (error) {
         console.log(error);
@@ -53,3 +58,4 @@ Promise<any>=>{
         })
     }
 }
+
