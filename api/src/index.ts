@@ -8,7 +8,7 @@ async function main() {
             "mongodb://127.0.0.1:27017/QUTMA"
         );
         console.log("Aplicación conectada a la base de datos");
-        app.listen(4000, () => {
+        app.listen(4001, () => {
             console.log("Aplicacion corriendo con exito")
         })
     } catch (error) {
