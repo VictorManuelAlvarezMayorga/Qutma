@@ -65,7 +65,7 @@ Promise<void>=>{
 
 export const signin = async (req: Request, res:Response): Promise<any> =>{
     //correo y contraseña
-        //Verificar que el usuario existe
+        //Verificar que el usuario existe 
         //si no existe devuelve un error
         //Si existe devuelve un token
         try {
