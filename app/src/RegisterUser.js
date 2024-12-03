@@ -18,7 +18,7 @@ export const RegisterUser = () => {
 
     const onSubmit = async () => {
         /* Enviar data al server */
-        try {
+        try { 
             data.rol = 'client'
             await axios.post('http://localhost:4001/users/create', data)
             navigate("/")

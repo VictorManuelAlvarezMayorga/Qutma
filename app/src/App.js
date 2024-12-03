@@ -18,7 +18,7 @@ const App = () => {
     try {
       const res = await axios.post("http://localhost:4001/users/login",data);
         const user = res.data.user;
-        user.logined = true;
+        user.logined = true; 
         localStorage.user = JSON.stringify(user)
         navigate("/list-q")
     } catch (error) {

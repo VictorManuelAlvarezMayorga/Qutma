@@ -8,7 +8,7 @@ const app: Application = express();
 
 
 //usuarios
-
+ 
 
 app.use(cors());
 app.use(express.json());
