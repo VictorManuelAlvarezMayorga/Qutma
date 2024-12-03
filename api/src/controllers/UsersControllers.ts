@@ -3,7 +3,7 @@ import { UserModels } from "../models/UsersModels";
 import jwt, { TokenExpiredError } from "jsonwebtoken";
 
 export const registerUsers = async (req: Request,res: Response):
-Promise<any>=>{
+Promise<void>=>{
     try {
         //primero validar que los datos existen
         const name = req.body.name
@@ -13,22 +13,25 @@ Promise<any>=>{
         const rol = req.body.rol
         //Administradores no pueden crear clientes
         if (req.user?.rol === "administrator" && rol === "client"){
-            return res.status(400).json({
+             res.status(400).json({
                 msg:'Los administradores no pueden crear clientes'
             })
+            return
         }
 
         //Validar que no falten datos para la creacion de un usuario
         if (!name || !email || !lastNames || !password || !rol){
-            return res.status(400).json({
+            res.status(400).json({
                 msg:'Faltan datos para la creacion de usuario'
             })
+            return
         }
         //validar que usuario sea admin si el usuario a crear es administrador
         if (rol === 'administrator' && req.user?.rol !='administrator'){
-            return res.status(400).json({
+            res.status(400).json({
                 msg:'No puedes crear un administrador si no lo eres tambien'
             })
+            return
         }
 
         /*await UserModels.create({
@@ -53,9 +56,10 @@ Promise<any>=>{
 
     } catch (error) {
         console.log(error);
-        return res.status(500).json({
+        res.status(500).json({
             msg:'Hubo un error al crear el usuario'
         })
+        return
     }
 }
 
@@ -69,7 +73,7 @@ export const signin = async (req: Request, res:Response): Promise<any> =>{
             
            if(user){
             const token = jwt.sign(JSON.stringify(user),"pocoyo");
-            return res.status(200).json({msg: "Sesion iniciada con exito", token})
+            return res.status(200).json({msg: "Sesion iniciada con exito", token, user})
            }else{
             return res.status(500).json({
                 msg:"No hay coincidencias en el sistema"

@@ -16,9 +16,11 @@ const App = () => {
   const onSubmit= async () => {
     //enviar data al server
     try {
-        data.rol="client"
-        await axios.post("http://localhost:4001/users/login",data)
-        navigate("/list-users")
+      const res = await axios.post("http://localhost:4001/users/login",data);
+        const user = res.data.user;
+        user.logined = true;
+        localStorage.user = JSON.stringify(user)
+        navigate("/list-q")
     } catch (error) {
         alert("hubo un error")
     }
