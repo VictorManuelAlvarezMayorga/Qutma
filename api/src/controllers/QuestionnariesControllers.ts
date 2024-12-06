@@ -3,6 +3,7 @@ import { IQuestion, IQuestionnaries } from "../globalTypes";
 import { QuestionsModels } from "../models/QuestionsModels";
 import { QuestionnairesModels } from "../models/QuestionnariesModels";
 import { OptionsModels } from "../models/OptionsModels";
+import { UserModels } from "../models/UsersModels";
 
 
 export const createQuizz = async (req: Request, res: Response): Promise<void> => {
@@ -53,6 +54,31 @@ export const createQuizz = async (req: Request, res: Response): Promise<void> =>
     } catch (error) {
         console.log(error);
         res.status(500).json({ msg: "Hubo un error al crear el cuestionario" })
+        return
+    }
+}
+
+export const getMetrics = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const numberOfUsers = await UserModels.find({ rol: 'client' }).countDocuments();//metodo
+        const numberOfQuestionnaries = await QuestionnairesModels.find().countDocuments();
+        res.status(200).json({ msg: 'Datos obtenidos con exito', numberOfQuestionnaries, numberOfUsers });
+        return
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: 'Hubo un error al obtener las metricas de la aplicacion' })
+        return
+    }
+}
+
+export const getQuestionnaries = async (req: Request, res: Response): Promise<void> => {
+    try {
+        const questionnaires = await QuestionnairesModels.find();
+        res.status(200).json({ msg: 'Cuestionarios obtenidos con exito', questionnaires });
+        return;
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ msg: 'Hubo un error al obtener los cuestionarios' })
         return
     }
 }

@@ -6,17 +6,17 @@ import axios from "axios";
 export const CreateQuestionnaire = () => {
 
     const [showQuestionnaire, setShowQuestionnaire] = useState(false);
-
+    const defaultQuestion = {
+        title: "Pregunta sin titulo",
+        type: "radio",
+        options: ["Opción 1"],
+        isMandatory: false,
+    }
     const [createQuestionnaire, setCreateQuestionnaire] = useState({
         title: "Cuestionario vacio",
         description: "Descripcion simple",
         questions: [
-            {
-                title: "Pregunta sin titulo",
-                type: "radio",
-                options: ["Opción 1"],
-                isMandatory: false,
-            }
+            defaultQuestion
         ],
         userId: JSON.parse(localStorage.user)._id
     });
@@ -41,11 +41,7 @@ export const CreateQuestionnaire = () => {
 
     const addQuestion = () => {
         const data = createQuestionnaire;
-        data.questions.push({
-            title: "Pregunta sin titulo",
-            type: "radio",
-            options: ["Opción 1"]
-        })
+        data.questions.push(defaultQuestion)
         setCreateQuestionnaire({ ...data })
     };
 
@@ -70,110 +66,110 @@ export const CreateQuestionnaire = () => {
             alert("Todos tienen 10 por sonso yo >:C")
         }
 
-        const onChangeOptionTitle = (e, iq, io) => {
-            const data = createQuestionnaire;
-            data.questions[iq].options[io] = e.target.value;
-            setCreateQuestionnaire({ ...data })
-        }
-        return (
-            <Container>
-                <Card className='mb-3 mt-5' border='warning'>
-                    <Card.Body>
-                        <Card.Title>{createQuestionnaire.title}</Card.Title>
-                        <Form.Control placeholder='Cambia el nombre de tu cuestionario' name="title" onChange={onChangeTitle} />
-                    </Card.Body>
-                </Card>
-                {
-                    createQuestionnaire.questions.map((q, i) => (
-                        <Card className='mb-3' border='primary'>
-                            <Card.Body>
-                                <Card.Text className='text-end'>
-                                    {
-                                        createQuestionnaire.questions.length != 1 && (
-                                            <OverlayTrigger
-                                                overlay={<Tooltip>
-                                                    Eliminar pregunta
-                                                </Tooltip>}
-                                            >
-                                                <CloseButton onClick={() => deleteQuestion(i)} />
-                                            </OverlayTrigger>
-                                        )
-                                    }
-
-                                </Card.Text>
-                                <Form.Group>
-                                    <Row className='m-3'>
-                                        <Col>
-                                            <Form.Control
-                                                value={q.title}
-                                                name="title"
-                                                onChange={(e) => onChangeBasicFields(e, i)}
-                                            />
-                                        </Col>
-                                        <Col>
-                                            <Form.Select
-                                                name="type"
-                                                onChange={(e) => onChangeBasicFields(e, i)}
-                                            >
-                                                <option value="radio">Opción multiple</option>
-                                                <option value="checkbox">Casilla de verificación</option>
-                                                <option value="select">Lista desplegable</option>
-                                                <option value="text">Respuesta corta</option>
-                                            </Form.Select>
-                                        </Col>
-                                    </Row>
-                                    <Row className='m-3'>
-                                        <Col>
-                                            <ol>
-                                                {
-                                                    q.options.map((o, io) => (
-                                                        <li className='mb-3'>
-                                                            <InputGroup>
-                                                                <Form.Control
-                                                                    value={o}
-                                                                    onChange={(e) => onChangeOptionTitle(e, i, io)}
-                                                                />
-                                                                {
-                                                                    q.options.length != 1 && (
-                                                                        <Button variant="outline-danger" onClick={() => deleteOption(i, io)}>X</Button>
-                                                                    )
-                                                                }
-                                                            </InputGroup>
-                                                        </li>
-                                                    ))
-                                                }
-                                            </ol>
-                                            <Button variant='info' onClick={() => addOption(i)}>Agregar opción</Button>
-                                        </Col>
-                                    </Row>
-                                </Form.Group>
-                            </Card.Body>
-                        </Card>
-                    ))
-                }
-                <Row className='m-3'>
-                    <Col>
-                        <Row>
-                            <Col className='text-center'>
-                                <Button onClick={() => addQuestion()}>Agregar pregunta</Button>
-                            </Col>
-                        </Row>
-                    </Col>
-                    <Col>
-                        <Row>
-                            <Col className='text-center'>
-                                <Button variant='success' onClick={() => sendData()}>Guardar cuestionario</Button>
-                            </Col>
-                        </Row>
-                    </Col>
-                </Row>
-                <Button onClick={() => setShowQuestionnaire(true)}>Vista previa</Button>
-                {
-                    showQuestionnaire && (
-                        <AnwerQuestionnaire questionnaire={createQuestionnaire} />
-                    )
-                }
-            </Container>
-        )
     }
+    const onChangeOptionTitle = (e, iq, io) => {
+        const data = createQuestionnaire;
+        data.questions[iq].options[io] = e.target.value;
+        setCreateQuestionnaire({ ...data })
+    }
+    return (
+        <Container>
+            <Card className='mb-3 mt-5' border='warning'>
+                <Card.Body>
+                    <Card.Title>{createQuestionnaire.title}</Card.Title>
+                    <Form.Control placeholder='Cambia el nombre de tu cuestionario' name="title" onChange={onChangeTitle} />
+                </Card.Body>
+            </Card>
+            {
+                createQuestionnaire.questions.map((q, i) => (
+                    <Card className='mb-3' border='primary'>
+                        <Card.Body>
+                            <Card.Text className='text-end'>
+                                {
+                                    createQuestionnaire.questions.length != 1 && (
+                                        <OverlayTrigger
+                                            overlay={<Tooltip>
+                                                Eliminar pregunta
+                                            </Tooltip>}
+                                        >
+                                            <CloseButton onClick={() => deleteQuestion(i)} />
+                                        </OverlayTrigger>
+                                    )
+                                }
+
+                            </Card.Text>
+                            <Form.Group>
+                                <Row className='m-3'>
+                                    <Col>
+                                        <Form.Control
+                                            value={q.title}
+                                            name="title"
+                                            onChange={(e) => onChangeBasicFields(e, i)}
+                                        />
+                                    </Col>
+                                    <Col>
+                                        <Form.Select
+                                            name="type"
+                                            onChange={(e) => onChangeBasicFields(e, i)}
+                                        >
+                                            <option value="radio">Opción multiple</option>
+                                            <option value="checkbox">Casilla de verificación</option>
+                                            <option value="select">Lista desplegable</option>
+                                            <option value="text">Respuesta corta</option>
+                                        </Form.Select>
+                                    </Col>
+                                </Row>
+                                <Row className='m-3'>
+                                    <Col>
+                                        <ol>
+                                            {
+                                                q.options.map((o, io) => (
+                                                    <li className='mb-3'>
+                                                        <InputGroup>
+                                                            <Form.Control
+                                                                value={o}
+                                                                onChange={(e) => onChangeOptionTitle(e, i, io)}
+                                                            />
+                                                            {
+                                                                q.options.length != 1 && (
+                                                                    <Button variant="outline-danger" onClick={() => deleteOption(i, io)}>X</Button>
+                                                                )
+                                                            }
+                                                        </InputGroup>
+                                                    </li>
+                                                ))
+                                            }
+                                        </ol>
+                                        <Button variant='info' onClick={() => addOption(i)}>Agregar opción</Button>
+                                    </Col>
+                                </Row>
+                            </Form.Group>
+                        </Card.Body>
+                    </Card>
+                ))
+            }
+            <Row className='m-3'>
+                <Col>
+                    <Row>
+                        <Col className='text-center'>
+                            <Button onClick={() => addQuestion()}>Agregar pregunta</Button>
+                        </Col>
+                    </Row>
+                </Col>
+                <Col>
+                    <Row>
+                        <Col className='text-center'>
+                            <Button variant='success' onClick={() => sendData()}>Guardar cuestionario</Button>
+                        </Col>
+                    </Row>
+                </Col>
+            </Row>
+            <Button onClick={() => setShowQuestionnaire(true)}>Vista previa</Button>
+            {
+                showQuestionnaire && (
+                    <AnwerQuestionnaire questionnaire={createQuestionnaire} />
+                )
+            }
+        </Container>
+    )
 }
